@@ -2,11 +2,11 @@
 const takePropertiesIketei = () => {
     return {
         "category_ids": (() => {
-            let x = document.querySelectorAll('#relative_word a') 
-            const category_ids = [];
-            for (var i = 0; i < x.length; ++i) {
-                category_ids[i] = x[i].href.slice(x[i].href.search('category_id=') + 12, x[i].href.search('&') == -1 ? x[i].href.length : x[i].href.search('&'))
-            }
+            let relativeWords = document.querySelectorAll('#relative_word a');
+            let category_ids = [...relativeWords];
+            category_ids = category_ids.map(x => {
+                return x.href.slice(x.href.search('category_id=') + 12, x.href.search('&') == -1 ? x.href.length : x.href.search('&'))
+            })
             return category_ids
         })(),
         "code": (() => {
@@ -16,7 +16,7 @@ const takePropertiesIketei = () => {
             return document.querySelector('[name="description"').content
         })(),
         "has_stock": (() => {
-            let soldOutCheck = document.querySelector(['#aanotice','.soldout_notice'])
+            let soldOutCheck = document.querySelector(['#aanotice', '.soldout_notice'])
             let has_stock = soldOutCheck ? false : true
             return has_stock
         })(),
@@ -36,7 +36,7 @@ const takePropertiesIketei = () => {
             return document.querySelector("#_brand3").innerText
         })(),
         "unavailable": (() => {
-            let soldOutCheck = document.querySelector(['#aanotice','.soldout_notice'])
+            let soldOutCheck = document.querySelector(['#aanotice', '.soldout_notice'])
             let unavailable = soldOutCheck ? '1' : (() => {
                 let variationCheck = document.querySelector('input[type="radio"]:checked')
                 return !variationCheck ? '2' : (() => {
@@ -94,6 +94,47 @@ const takePropertiesIketei = () => {
         margin-left:5px    
     }
     
+    #checkout-button{
+        background-color: transparent;
+        border: 0;
+        fill: #12576d;
+        cursor: pointer;
+        font-size: 32px;
+        line-height: inherit;
+        margin: 0 10px;
+        outline: none;
+        padding: 0;
+        position: relative;
+        width: 30px;
+    }
+
+    .bcTool__cart {
+        background-color: transparent;
+        border: 0;
+        color: #12576d;
+        cursor: pointer;
+        font-size: 32px;
+        line-height: inherit;
+        margin: 0 10px;
+        outline: none;
+        padding: 0;
+        position: relative;
+    }
+
+    .bcTool__cart.has-items::after{
+        background-color: red;
+        border-radius: 50%;
+        content: "";
+        display: block;
+        height: 14px;
+        position: relative;
+        top: -12px;
+        right: -56px;
+        width: 14px;
+        z-index: 11;
+    }
+    
+
 
     .bcTool_btn.is-disabled {
         cursor:default;
@@ -233,6 +274,12 @@ const takePropertiesIketei = () => {
         width: 104px;
     }
 
+    .bcTool__guideLink svg{
+        width: 10px;
+        fill:#12576d;
+    }
+
+
     .bcTool__mainHeaderCont{
         justify-content: space-between;
         max-height: 50px;
@@ -285,6 +332,11 @@ const takePropertiesIketei = () => {
         width: auto;
         z-index: 10;
     }
+    
+    .bc__selectBox svg{
+        width: 13px;
+        margin: 5px;
+    }
 
     .bc__selectBox select {
         appearance: none;
@@ -314,7 +366,7 @@ const takePropertiesIketei = () => {
         align-items: center;
         flex: none;
         flex-wrap: nowrap;
-        width: 220px;
+        width: auto;
     }
 
     .is-closed .bcTool_header{
@@ -329,6 +381,10 @@ const takePropertiesIketei = () => {
         border: none;
         width:194px;
         min-height: 54px;
+    }
+
+    .is-hided{
+        display: none;
     }
 
     @media only screen and (max-width: 739px){
@@ -385,19 +441,15 @@ const takePropertiesIketei = () => {
         }
     }
 
-
-
-
-    
     `
     document.head.appendChild(styleEl);
 })();
 
 (() => {
-   
+
     //handle Functions
     const handleTakeItem = () => {
-        let bc_items=JSON.parse(localStorage.getItem('bc_items'))??{};
+        let bc_items = JSON.parse(localStorage.getItem('bc_items')) ?? {};
         let item
         //Product Page Check
         try {
@@ -408,12 +460,12 @@ const takePropertiesIketei = () => {
         }
 
         //Available Check
-        switch (item.unavailable){
+        switch (item.unavailable) {
             case "1": {
                 alert("Out of stock")
                 return;
             }
-            case "2":{
+            case "2": {
                 alert("Please select all options (quantity, size, color, etc.) for the item and proceed to order again.")
                 return;
             }
@@ -422,15 +474,15 @@ const takePropertiesIketei = () => {
                 const key = item.code + '_' + item.variations[0].value
                 bc_items[key] = item
             }
-            const jsonBc_items = JSON.stringify(bc_items);
-            localStorage.setItem('bc_items',jsonBc_items);
+                const jsonBc_items = JSON.stringify(bc_items);
+                localStorage.setItem('bc_items', jsonBc_items);
         }
 
     }
 
 
     const handleCheckOut = () => {
-        let bc_items=JSON.parse(localStorage.getItem('bc_items'))??{};
+        let bc_items = JSON.parse(localStorage.getItem('bc_items')) ?? {};
         const cartQuantity = Object.keys(bc_items).length
         if (cartQuantity === 0) alert('Cart is empty')
         else {
@@ -441,9 +493,9 @@ const takePropertiesIketei = () => {
                     console.log(itemJSON)
                 }
             }
-            bc_items={};
+            bc_items = {};
             const jsonBc_items = JSON.stringify(bc_items);
-            localStorage.setItem('bc_items',jsonBc_items);
+            localStorage.setItem('bc_items', jsonBc_items);
         }
     }
 
@@ -464,10 +516,11 @@ const takePropertiesIketei = () => {
                 <img src="https://connect.buyee.jp/d98401c1cb39759d4c69859f92cc0d8957daa352e7bc7ad4e459d27f738f95f0/widget/assets/677397bcc365a7fa2351ba258471e1dc.png" alt="buyee.jp" class="bc__buyeeLogo" loading="lazy">
                 <div class="bcTool__mainHeaderCont">    
                     <a href="https://media.buyee.jp/guide/bcv2/en/product.html?rc=BC_iketei_guide" class="bcTool__guideLink" target="_blank">
-                        Usage Guide
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M96 0C43 0 0 43 0 96V416c0 53 43 96 96 96H384h32c17.7 0 32-14.3 32-32s-14.3-32-32-32V384c17.7 0 32-14.3 32-32V32c0-17.7-14.3-32-32-32H384 96zm0 384H352v64H96c-17.7 0-32-14.3-32-32s14.3-32 32-32zm32-240c0-8.8 7.2-16 16-16H336c8.8 0 16 7.2 16 16s-7.2 16-16 16H144c-8.8 0-16-7.2-16-16zm16 48H336c8.8 0 16 7.2 16 16s-7.2 16-16 16H144c-8.8 0-16-7.2-16-16s7.2-16 16-16z"/></svg>    
+                    Usage Guide
                     </a>
                     <span class="bc__selectBox">
-                        <i class="g-feather g-feather-globe"></i>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M352 256c0 22.2-1.2 43.6-3.3 64H163.3c-2.2-20.4-3.3-41.8-3.3-64s1.2-43.6 3.3-64H348.7c2.2 20.4 3.3 41.8 3.3 64zm28.8-64H503.9c5.3 20.5 8.1 41.9 8.1 64s-2.8 43.5-8.1 64H380.8c2.1-20.6 3.2-42 3.2-64s-1.1-43.4-3.2-64zm112.6-32H376.7c-10-63.9-29.8-117.4-55.3-151.6c78.3 20.7 142 77.5 171.9 151.6zm-149.1 0H167.7c6.1-36.4 15.5-68.6 27-94.7c10.5-23.6 22.2-40.7 33.5-51.5C239.4 3.2 248.7 0 256 0s16.6 3.2 27.8 13.8c11.3 10.8 23 27.9 33.5 51.5c11.6 26 21 58.2 27 94.7zm-209 0H18.6C48.6 85.9 112.2 29.1 190.6 8.4C165.1 42.6 145.3 96.1 135.3 160zM8.1 192H131.2c-2.1 20.6-3.2 42-3.2 64s1.1 43.4 3.2 64H8.1C2.8 299.5 0 278.1 0 256s2.8-43.5 8.1-64zM194.7 446.6c-11.6-26-20.9-58.2-27-94.6H344.3c-6.1 36.4-15.5 68.6-27 94.6c-10.5 23.6-22.2 40.7-33.5 51.5C272.6 508.8 263.3 512 256 512s-16.6-3.2-27.8-13.8c-11.3-10.8-23-27.9-33.5-51.5zM135.3 352c10 63.9 29.8 117.4 55.3 151.6C112.2 482.9 48.6 426.1 18.6 352H135.3zm358.1 0c-30 74.1-93.6 130.9-171.9 151.6c25.5-34.2 45.2-87.7 55.3-151.6H493.4z"/></svg>
                         <select id="header-nav__select-culture">
                             <option value="en">English</option>
                             <option value="ja">日本語</option>
@@ -500,22 +553,27 @@ const takePropertiesIketei = () => {
     //create take Item button
     (() => {
         const btn = document.createElement("button")
-        btn.innerText = 'Take Prop'
+        btn.innerText = 'Add to cart'
         btn.id = 'add-button'
         btn.classList.add('bcTool_btn')
         if (window.location.href.search('products/detail.php?') === -1) {
             btn.classList.add('is-disabled');
             btn.disabled = true;
+            document.querySelector('.bc__paragraph--main').innerText = 'Proceed to the product details page on IKETEI ONLINE for the item you want, and confirm options such as desired size, color, quantity, etc.'
+            document.querySelector('.bc__paragraph--annotation').classList.add('is-hided');
         }
         btn.onclick = handleTakeItem
         document.querySelector('.bcTool_footer').appendChild(btn)
     })();
     //create checkout button
     (() => {
-        const btn = document.createElement("button")
-        btn.innerText = 'Checkout'
-        btn.id = 'checkout-button'
-        btn.classList.add('bcTool_btn')
+        const checkOutHTML = `
+        <a href=# class="bcTool__cart has-items">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M24 0C10.7 0 0 10.7 0 24S10.7 48 24 48H76.1l60.3 316.5c2.2 11.3 12.1 19.5 23.6 19.5H488c13.3 0 24-10.7 24-24s-10.7-24-24-24H179.9l-9.1-48h317c14.3 0 26.9-9.5 30.8-23.3l54-192C578.3 52.3 563 32 541.8 32H122l-2.4-12.5C117.4 8.2 107.5 0 96 0H24zM176 512c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm336-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48z"/></svg>
+        </a>`
+        document.querySelector('.bcTool_footer').innerHTML += checkOutHTML;
+        const btn = document.querySelector('.bcTool_footer svg');
+        btn.id = 'checkout-button';
         btn.onclick = handleCheckOut
         document.querySelector('.bcTool_footer').appendChild(btn)
     })();
