@@ -2,7 +2,7 @@
 const takePropertiesIketei = () => {
     return {
         "category_ids": (() => {
-            let x = document.querySelector('#relative_word').querySelectorAll('a')
+            let x = document.querySelectorAll('#relative_word a') 
             const category_ids = [];
             for (var i = 0; i < x.length; ++i) {
                 category_ids[i] = x[i].href.slice(x[i].href.search('category_id=') + 12, x[i].href.search('&') == -1 ? x[i].href.length : x[i].href.search('&'))
@@ -16,12 +16,12 @@ const takePropertiesIketei = () => {
             return document.querySelector('[name="description"').content
         })(),
         "has_stock": (() => {
-            let soldOutCheck = document.querySelector('#aanotice') || document.querySelector('.soldout_notice')
+            let soldOutCheck = document.querySelector(['#aanotice','.soldout_notice'])
             let has_stock = soldOutCheck ? false : true
             return has_stock
         })(),
         "image": (() => {
-            return document.querySelector('.slick-slide').querySelector('img').src
+            return document.querySelector('.slick-slide img').src
         })(),
         "is_limited": false,
         "price": (() => {
@@ -36,7 +36,7 @@ const takePropertiesIketei = () => {
             return document.querySelector("#_brand3").innerText
         })(),
         "unavailable": (() => {
-            let soldOutCheck = document.querySelector('#aanotice') || document.querySelector('.soldout_notice')
+            let soldOutCheck = document.querySelector(['#aanotice','.soldout_notice'])
             let unavailable = soldOutCheck ? '1' : (() => {
                 let variationCheck = document.querySelector('input[type="radio"]:checked')
                 return !variationCheck ? '2' : (() => {
@@ -56,7 +56,7 @@ const takePropertiesIketei = () => {
                 let checkedId = checked.id;
                 return [{
                     "key": "variation",
-                    "value": document.querySelector(`[for=${checkedId}]`).querySelector('.c1title').firstChild.textContent
+                    "value": document.querySelector(`[for=${checkedId}] .c1title`).firstChild.textContent
                 }]
             }
         })(),
@@ -236,7 +236,6 @@ const takePropertiesIketei = () => {
     .bcTool__mainHeaderCont{
         justify-content: space-between;
         max-height: 50px;
-        line-height: 1;
         align-items: center;
         display: inline-flex;
         width: 100%;
