@@ -106,13 +106,12 @@ const takePropertiesIketei = () => {
         background: none transparent;
         border: none;
         display: block;
-        height: 320px;
         max-width: 1200px;
         opacity: 1;
         position: fixed;
         top: auto;
         right: auto;
-        bottom: 0;
+        bottom: 20px;
         left: 50%;
         transform: translateX(-50%);
         transition: none 0s ease 0s;
@@ -126,16 +125,14 @@ const takePropertiesIketei = () => {
         border: 3px solid #5b6770;
         border-radius: 4px;
         box-shadow: 0 5px 12px rgb(0 0 0 / 20%);
-        margin: auto;
         padding: 0;
         position: absolute;
-        bottom: 20px;
         left: 50%;
         transform: translateX(-50%);
-        width: 98vw;
+        width: 98%;
         z-index: 2147483647;
         max-width:1170px;   
-        max-height: 122.688px
+        bottom:0;
         overflow: hidden;
     }
 
@@ -219,18 +216,6 @@ const takePropertiesIketei = () => {
         text-decoration: none;
         font-size: 12px;
     }
-
-    .bcTool__guideLink {
-        margin: auto 5px auto 0;
-        overflow: hidden;
-        text-align: right;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        padding-right: 0;
-        text-align-last: left;
-        width: 104px;
-    }
-
     
     .bc__buyeeLogo{
         width: 110px;
@@ -346,6 +331,62 @@ const takePropertiesIketei = () => {
         width:194px;
         min-height: 54px;
     }
+
+    @media only screen and (max-width: 739px){
+        .bcTool_main{
+            display:block
+        }
+        .bc__paragraph.bc__paragraph--annotation {
+            font-size:12px;
+        }
+        .bc__paragraph.bc__paragraph--main{
+            font-size:14px;
+        }
+        .bc__buyeeLogo{
+            width:85px;
+        }
+        .bcTool__mainHeader{
+            flex-direction: row;
+            align-items:center;
+            width: auto;
+            justify-content: space-between;
+        }
+        .bcTool__mainHeaderCont {
+            justify-content: flex-end;
+        }
+
+        .bcTool__guideLink{
+            width:auto;
+        }
+        .bcTool__guideLink{
+            width:auto;
+        }
+        .bcTool_footer{
+            width:auto;
+        }
+        #add-button{
+            flex:1;
+        }
+        .bcTool_btn{
+            height:38px;
+            font-size:12px;
+        }
+        .bcTool__subHeading{
+            display:none;
+        }
+        .bcTool__heading{
+            12px;
+        }
+        .bcTool.is-closed{
+            width:auto;
+            min-height:0;
+        }
+        .is-closed .bcTool__toggleBtn.bcTool__toggleBtn--up{
+            height:30px
+        }
+    }
+
+
 
 
     
