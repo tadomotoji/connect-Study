@@ -2,7 +2,7 @@
 const takePropertiesIketei = () => {
     return {
         "category_ids": (() => {
-            let x = document.getElementById('relative_word').getElementsByTagName('a')
+            let x = document.querySelector('#relative_word').querySelectorAll('a')
             const category_ids = [];
             for (var i = 0; i < x.length; ++i) {
                 category_ids[i] = x[i].href.slice(x[i].href.search('category_id=') + 12, x[i].href.search('&') == -1 ? x[i].href.length : x[i].href.search('&'))
@@ -10,10 +10,10 @@ const takePropertiesIketei = () => {
             return category_ids
         })(),
         "code": (() => {
-            return document.getElementById('product_code_dynamic').innerHTML
+            return document.querySelector('#product_code_dynamic').innerHTML
         })(),
         "description": (() => {
-            return document.getElementsByName('description')[0].content
+            return document.querySelector('[name="description"').content
         })(),
         "has_stock": (() => {
             let soldOutCheck = document.querySelector('#aanotice') || document.querySelector('.soldout_notice')
